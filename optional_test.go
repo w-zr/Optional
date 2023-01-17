@@ -8,16 +8,11 @@ import (
 
 func optionalGet[T any](t *testing.T, val T) {
 	i := Optional[T]{}
-	_, err := i.Get()
-	assert.NotNil(t, err)
-
-	v := i.GetOr(*new(T))
-	assert.Equal(t, *new(T), v)
+	assert.Equal(t, *new(T), i.Get())
+	assert.Equal(t, *new(T), i.GetOr(*new(T)))
 
 	i.Assign(val)
-	v, err = i.Get()
-	assert.Nil(t, err)
-	assert.Equal(t, val, v)
+	assert.Equal(t, val, i.Get())
 }
 
 func TestOptionalGet(t *testing.T) {
@@ -53,6 +48,5 @@ func TestFlatMap(t *testing.T) {
 		}
 		return Convert(10 / i)
 	}
-	_, err := zero.FlatMap(fm).Get()
-	assert.NotNil(t, err)
+	assert.Equal(t, 0, zero.FlatMap(fm).Get())
 }
